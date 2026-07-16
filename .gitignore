@@ -1,0 +1,12 @@
+node_modules/
+.env
+npm-debug.log*
+.DS_Store
+Thumbs.db
+
+# قاعدة البيانات المحلية
+data/*.db
+
+# ملفات مؤقتة
+*.log
+.vscode/

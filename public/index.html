@@ -1,0 +1,1004 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+
+    <meta
+        name="viewport"
+        content="width=device-width, initial-scale=1.0"
+    >
+
+    <meta
+        name="description"
+        content="متجر إلكتروني احترافي مبني باستخدام Node.js وExpress وSQLite"
+    >
+
+    <title>Nova Store | متجر إلكتروني</title>
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+
+    <link
+        href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap"
+        rel="stylesheet"
+    >
+
+    <link
+        rel="stylesheet"
+        href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.7.2/css/all.min.css"
+    >
+
+    <link rel="stylesheet" href="/style.css">
+</head>
+
+<body>
+
+    <!-- رسائل النظام -->
+    <div id="toastContainer" class="toast-container"></div>
+
+    <!-- =========================
+         واجهة المتجر
+    ========================== -->
+    <div id="storeView">
+
+        <header class="main-header">
+            <div class="container nav-container">
+
+                <a href="#" class="brand" id="homeLink">
+                    <span class="brand-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </span>
+
+                    <span class="brand-text">
+                        <strong>Nova</strong>
+                        <small>Store</small>
+                    </span>
+                </a>
+
+                <nav class="main-nav">
+                    <a href="#productsSection" class="active">
+                        المنتجات
+                    </a>
+
+                    <a href="#featuresSection">
+                        المزايا
+                    </a>
+
+                    <button
+                        type="button"
+                        class="nav-link-button"
+                        id="openAdminButton"
+                    >
+                        لوحة الإدارة
+                    </button>
+                </nav>
+
+                <button
+                    type="button"
+                    class="cart-header-button"
+                    id="openCartButton"
+                    aria-label="فتح سلة المشتريات"
+                >
+                    <i class="fa-solid fa-cart-shopping"></i>
+
+                    <span>السلة</span>
+
+                    <strong id="cartCount">0</strong>
+                </button>
+
+            </div>
+        </header>
+
+        <main>
+
+            <!-- Hero -->
+            <section class="hero-section">
+                <div class="hero-decoration hero-decoration-one"></div>
+                <div class="hero-decoration hero-decoration-two"></div>
+
+                <div class="container hero-grid">
+
+                    <div class="hero-content">
+                        <span class="hero-badge">
+                            <i class="fa-solid fa-star"></i>
+                            تجربة تسوق عصرية
+                        </span>
+
+                        <h1>
+                            كل ما تحتاجه
+                            <span>في مكان واحد</span>
+                        </h1>
+
+                        <p>
+                            اكتشف مجموعة مختارة من المنتجات، وابحث بسهولة،
+                            وأضف احتياجاتك إلى السلة، ثم أكمل طلبك خلال لحظات.
+                        </p>
+
+                        <div class="hero-actions">
+                            <a
+                                href="#productsSection"
+                                class="primary-button"
+                            >
+                                تصفح المنتجات
+                                <i class="fa-solid fa-arrow-left"></i>
+                            </a>
+
+                            <button
+                                type="button"
+                                class="secondary-button"
+                                id="heroCartButton"
+                            >
+                                <i class="fa-solid fa-cart-shopping"></i>
+                                عرض السلة
+                            </button>
+                        </div>
+
+                        <div class="hero-statistics">
+                            <div>
+                                <strong id="heroProductsCount">0</strong>
+                                <span>منتج</span>
+                            </div>
+
+                            <div>
+                                <strong>24/7</strong>
+                                <span>متاح دائمًا</span>
+                            </div>
+
+                            <div>
+                                <strong>100%</strong>
+                                <span>تجربة سهلة</span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="hero-visual">
+                        <div class="hero-card hero-card-main">
+                            <div class="hero-product-icon">
+                                <i class="fa-solid fa-box-open"></i>
+                            </div>
+
+                            <span>منتجات مميزة</span>
+                            <strong>تسوق بثقة</strong>
+                        </div>
+
+                        <div class="hero-floating-card hero-floating-one">
+                            <i class="fa-solid fa-truck-fast"></i>
+
+                            <div>
+                                <strong>طلب سريع</strong>
+                                <span>خطوات بسيطة</span>
+                            </div>
+                        </div>
+
+                        <div class="hero-floating-card hero-floating-two">
+                            <i class="fa-solid fa-shield-halved"></i>
+
+                            <div>
+                                <strong>بيانات آمنة</strong>
+                                <span>معالجة موثوقة</span>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- المزايا -->
+            <section id="featuresSection" class="features-section">
+                <div class="container features-grid">
+
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </div>
+
+                        <div>
+                            <h3>بحث سريع</h3>
+                            <p>اعثر على المنتجات بالاسم أو الوصف بسهولة.</p>
+                        </div>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-layer-group"></i>
+                        </div>
+
+                        <div>
+                            <h3>تصنيفات منظمة</h3>
+                            <p>تصفية المنتجات حسب الفئة المناسبة.</p>
+                        </div>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-cart-plus"></i>
+                        </div>
+
+                        <div>
+                            <h3>سلة مرنة</h3>
+                            <p>تحكم بالكميات واحذف المنتجات متى شئت.</p>
+                        </div>
+                    </article>
+
+                    <article class="feature-card">
+                        <div class="feature-icon">
+                            <i class="fa-solid fa-circle-check"></i>
+                        </div>
+
+                        <div>
+                            <h3>طلب مباشر</h3>
+                            <p>أدخل بياناتك وأكمل الطلب خلال لحظات.</p>
+                        </div>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- المنتجات -->
+            <section id="productsSection" class="products-section">
+                <div class="container">
+
+                    <div class="section-heading">
+                        <div>
+                            <span class="section-label">اكتشف المتجر</span>
+                            <h2>منتجاتنا</h2>
+                            <p>
+                                اختر المنتج المناسب وأضفه مباشرة إلى سلة التسوق.
+                            </p>
+                        </div>
+
+                        <div class="products-counter">
+                            <span id="visibleProductsCount">0</span>
+                            منتج متاح
+                        </div>
+                    </div>
+
+                    <div class="filters-card">
+
+                        <div class="search-control">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+
+                            <input
+                                type="search"
+                                id="searchInput"
+                                placeholder="ابحث باسم المنتج أو الوصف..."
+                                autocomplete="off"
+                            >
+                        </div>
+
+                        <div class="select-control">
+                            <i class="fa-solid fa-filter"></i>
+
+                            <select id="categoryFilter">
+                                <option value="">جميع الفئات</option>
+                            </select>
+                        </div>
+
+                        <button
+                            type="button"
+                            class="primary-button filter-button"
+                            id="searchButton"
+                        >
+                            بحث
+                        </button>
+
+                        <button
+                            type="button"
+                            class="reset-button"
+                            id="resetFiltersButton"
+                            title="إعادة ضبط البحث"
+                        >
+                            <i class="fa-solid fa-rotate-left"></i>
+                        </button>
+
+                    </div>
+
+                    <div
+                        id="productsLoading"
+                        class="loading-state"
+                    >
+                        <span class="loader"></span>
+                        <p>جارٍ تحميل المنتجات...</p>
+                    </div>
+
+                    <div
+                        id="productsEmpty"
+                        class="empty-state hidden"
+                    >
+                        <i class="fa-solid fa-box-open"></i>
+                        <h3>لا توجد منتجات</h3>
+                        <p>لم يتم العثور على منتجات تطابق البحث الحالي.</p>
+                    </div>
+
+                    <div
+                        id="productsGrid"
+                        class="products-grid"
+                    ></div>
+
+                </div>
+            </section>
+
+        </main>
+
+        <footer class="main-footer">
+            <div class="container footer-content">
+
+                <div class="footer-brand">
+                    <span class="brand-icon">
+                        <i class="fa-solid fa-bag-shopping"></i>
+                    </span>
+
+                    <div>
+                        <strong>Nova Store</strong>
+                        <p>
+                            متجر إلكتروني مبني باستخدام Node.js وExpress وSQLite.
+                        </p>
+                    </div>
+                </div>
+
+                <p class="copyright">
+                    © <span id="currentYear"></span>
+                    جميع الحقوق محفوظة.
+                </p>
+
+            </div>
+        </footer>
+
+    </div>
+
+    <!-- =========================
+         سلة المشتريات
+    ========================== -->
+    <div id="cartOverlay" class="page-overlay"></div>
+
+    <aside id="cartDrawer" class="cart-drawer">
+
+        <div class="drawer-header">
+            <div>
+                <span>مشترياتك</span>
+                <h2>سلة التسوق</h2>
+            </div>
+
+            <button
+                type="button"
+                class="icon-button"
+                id="closeCartButton"
+                aria-label="إغلاق السلة"
+            >
+                <i class="fa-solid fa-xmark"></i>
+            </button>
+        </div>
+
+        <div id="cartLoading" class="drawer-loading hidden">
+            <span class="loader"></span>
+        </div>
+
+        <div id="cartEmpty" class="cart-empty-state">
+            <i class="fa-solid fa-cart-shopping"></i>
+            <h3>سلتك فارغة</h3>
+            <p>ابدأ بإضافة بعض المنتجات إلى سلة التسوق.</p>
+        </div>
+
+        <div id="cartItemsContainer" class="cart-items"></div>
+
+        <div class="cart-summary">
+
+            <div class="summary-row">
+                <span>عدد القطع</span>
+                <strong id="cartItemsQuantity">0</strong>
+            </div>
+
+            <div class="summary-row total-row">
+                <span>الإجمالي</span>
+
+                <strong>
+                    <span id="cartTotal">0.00</span>
+                    $
+                </strong>
+            </div>
+
+            <button
+                type="button"
+                class="primary-button full-width"
+                id="checkoutButton"
+            >
+                إتمام الطلب
+                <i class="fa-solid fa-arrow-left"></i>
+            </button>
+
+            <button
+                type="button"
+                class="danger-outline-button full-width"
+                id="clearCartButton"
+            >
+                <i class="fa-solid fa-trash"></i>
+                تفريغ السلة
+            </button>
+
+        </div>
+
+    </aside>
+
+    <!-- =========================
+         نافذة إتمام الطلب
+    ========================== -->
+    <div
+        id="checkoutModal"
+        class="modal"
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby="checkoutTitle"
+    >
+        <div class="modal-card checkout-modal-card">
+
+            <div class="modal-header">
+                <div>
+                    <span>الخطوة الأخيرة</span>
+                    <h2 id="checkoutTitle">إتمام الطلب</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="icon-button"
+                    id="closeCheckoutButton"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div class="checkout-layout">
+
+                <form id="checkoutForm" class="checkout-form">
+
+                    <div class="form-group">
+                        <label for="customerName">
+                            الاسم الكامل
+                        </label>
+
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-user"></i>
+
+                            <input
+                                type="text"
+                                id="customerName"
+                                minlength="3"
+                                maxlength="100"
+                                required
+                                placeholder="أدخل اسم العميل"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerPhone">
+                            رقم الهاتف
+                        </label>
+
+                        <div class="input-with-icon">
+                            <i class="fa-solid fa-phone"></i>
+
+                            <input
+                                type="tel"
+                                id="customerPhone"
+                                minlength="6"
+                                maxlength="30"
+                                required
+                                placeholder="أدخل رقم الهاتف"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="customerAddress">
+                            عنوان التوصيل
+                        </label>
+
+                        <div class="input-with-icon textarea-icon">
+                            <i class="fa-solid fa-location-dot"></i>
+
+                            <textarea
+                                id="customerAddress"
+                                minlength="5"
+                                maxlength="300"
+                                required
+                                placeholder="أدخل عنوان التوصيل بالتفصيل"
+                            ></textarea>
+                        </div>
+                    </div>
+
+                    <button
+                        type="submit"
+                        class="primary-button full-width"
+                        id="confirmOrderButton"
+                    >
+                        <span>تأكيد الطلب</span>
+                        <i class="fa-solid fa-circle-check"></i>
+                    </button>
+
+                </form>
+
+                <div class="checkout-summary-card">
+                    <span class="checkout-summary-label">
+                        ملخص الطلب
+                    </span>
+
+                    <div id="checkoutSummaryItems"></div>
+
+                    <div class="checkout-final-total">
+                        <span>الإجمالي النهائي</span>
+
+                        <strong>
+                            <span id="checkoutTotal">0.00</span>
+                            $
+                        </strong>
+                    </div>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+    <!-- =========================
+         لوحة الإدارة
+    ========================== -->
+    <section id="adminView" class="admin-view hidden">
+
+        <aside class="admin-sidebar">
+
+            <div class="admin-brand">
+                <span class="brand-icon">
+                    <i class="fa-solid fa-bag-shopping"></i>
+                </span>
+
+                <div>
+                    <strong>Nova Store</strong>
+                    <span>لوحة الإدارة</span>
+                </div>
+            </div>
+
+            <nav class="admin-navigation">
+
+                <button
+                    type="button"
+                    class="admin-nav-item active"
+                    data-admin-section="dashboard"
+                >
+                    <i class="fa-solid fa-chart-pie"></i>
+                    <span>لوحة المعلومات</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-admin-section="products"
+                >
+                    <i class="fa-solid fa-boxes-stacked"></i>
+                    <span>إدارة المنتجات</span>
+                </button>
+
+                <button
+                    type="button"
+                    class="admin-nav-item"
+                    data-admin-section="orders"
+                >
+                    <i class="fa-solid fa-receipt"></i>
+                    <span>الطلبات</span>
+                </button>
+
+            </nav>
+
+            <button
+                type="button"
+                class="back-to-store-button"
+                id="backToStoreButton"
+            >
+                <i class="fa-solid fa-store"></i>
+                العودة إلى المتجر
+            </button>
+
+        </aside>
+
+        <main class="admin-main">
+
+            <header class="admin-topbar">
+
+                <div>
+                    <span class="admin-date" id="adminDate"></span>
+                    <h1 id="adminPageTitle">لوحة المعلومات</h1>
+                </div>
+
+                <div class="admin-profile">
+                    <div>
+                        <strong>مدير المتجر</strong>
+                        <span>Administrator</span>
+                    </div>
+
+                    <span class="admin-avatar">
+                        <i class="fa-solid fa-user-shield"></i>
+                    </span>
+                </div>
+
+            </header>
+
+            <!-- Dashboard -->
+            <section
+                id="adminDashboardSection"
+                class="admin-section"
+            >
+                <div class="statistics-grid">
+
+                    <article class="stat-card">
+                        <span class="stat-icon blue">
+                            <i class="fa-solid fa-box"></i>
+                        </span>
+
+                        <div>
+                            <span>إجمالي المنتجات</span>
+                            <strong id="adminProductsCount">0</strong>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <span class="stat-icon purple">
+                            <i class="fa-solid fa-receipt"></i>
+                        </span>
+
+                        <div>
+                            <span>إجمالي الطلبات</span>
+                            <strong id="adminOrdersCount">0</strong>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <span class="stat-icon green">
+                            <i class="fa-solid fa-dollar-sign"></i>
+                        </span>
+
+                        <div>
+                            <span>إجمالي الإيرادات</span>
+
+                            <strong>
+                                <span id="adminRevenue">0.00</span>
+                                $
+                            </strong>
+                        </div>
+                    </article>
+
+                    <article class="stat-card">
+                        <span class="stat-icon orange">
+                            <i class="fa-solid fa-cubes"></i>
+                        </span>
+
+                        <div>
+                            <span>إجمالي المخزون</span>
+                            <strong id="adminStockCount">0</strong>
+                        </div>
+                    </article>
+
+                </div>
+
+                <div class="admin-dashboard-grid">
+
+                    <article class="admin-panel">
+                        <div class="admin-panel-header">
+                            <div>
+                                <span>آخر النشاطات</span>
+                                <h2>أحدث الطلبات</h2>
+                            </div>
+
+                            <button
+                                type="button"
+                                class="text-button"
+                                data-go-to-orders
+                            >
+                                عرض الجميع
+                            </button>
+                        </div>
+
+                        <div id="recentOrdersContainer"></div>
+                    </article>
+
+                    <article class="admin-panel">
+                        <div class="admin-panel-header">
+                            <div>
+                                <span>تنبيه المخزون</span>
+                                <h2>المنتجات الأقل توفرًا</h2>
+                            </div>
+                        </div>
+
+                        <div id="lowStockContainer"></div>
+                    </article>
+
+                </div>
+            </section>
+
+            <!-- Products Admin -->
+            <section
+                id="adminProductsSection"
+                class="admin-section hidden"
+            >
+                <div class="admin-section-toolbar">
+
+                    <div>
+                        <span class="section-label">إدارة المخزون</span>
+                        <h2>المنتجات</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="primary-button"
+                        id="addProductButton"
+                    >
+                        <i class="fa-solid fa-plus"></i>
+                        إضافة منتج
+                    </button>
+
+                </div>
+
+                <div class="admin-table-card">
+
+                    <div class="admin-table-search">
+                        <i class="fa-solid fa-magnifying-glass"></i>
+
+                        <input
+                            type="search"
+                            id="adminProductSearch"
+                            placeholder="ابحث داخل المنتجات..."
+                        >
+                    </div>
+
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>المنتج</th>
+                                    <th>الفئة</th>
+                                    <th>السعر</th>
+                                    <th>المخزون</th>
+                                    <th>تاريخ الإضافة</th>
+                                    <th>الإجراءات</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="adminProductsTableBody"></tbody>
+                        </table>
+                    </div>
+
+                </div>
+            </section>
+
+            <!-- Orders Admin -->
+            <section
+                id="adminOrdersSection"
+                class="admin-section hidden"
+            >
+                <div class="admin-section-toolbar">
+                    <div>
+                        <span class="section-label">إدارة المبيعات</span>
+                        <h2>الطلبات</h2>
+                    </div>
+
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="refreshOrdersButton"
+                    >
+                        <i class="fa-solid fa-rotate"></i>
+                        تحديث
+                    </button>
+                </div>
+
+                <div class="admin-table-card">
+                    <div class="table-responsive">
+                        <table class="admin-table">
+                            <thead>
+                                <tr>
+                                    <th>رقم الطلب</th>
+                                    <th>العميل</th>
+                                    <th>الهاتف</th>
+                                    <th>الإجمالي</th>
+                                    <th>الحالة</th>
+                                    <th>التاريخ</th>
+                                    <th>التفاصيل</th>
+                                </tr>
+                            </thead>
+
+                            <tbody id="adminOrdersTableBody"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </main>
+
+    </section>
+
+    <!-- =========================
+         نافذة إضافة/تعديل منتج
+    ========================== -->
+    <div id="productModal" class="modal">
+        <div class="modal-card product-modal-card">
+
+            <div class="modal-header">
+                <div>
+                    <span>إدارة المنتجات</span>
+                    <h2 id="productModalTitle">إضافة منتج</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="icon-button"
+                    id="closeProductModalButton"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <form id="productForm" class="product-form">
+
+                <input type="hidden" id="productId">
+
+                <div class="form-grid">
+
+                    <div class="form-group">
+                        <label for="productName">اسم المنتج</label>
+
+                        <input
+                            type="text"
+                            id="productName"
+                            required
+                            maxlength="120"
+                            placeholder="مثال: حاسوب محمول"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productCategory">الفئة</label>
+
+                        <input
+                            type="text"
+                            id="productCategory"
+                            required
+                            maxlength="60"
+                            placeholder="مثال: electronics"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productPrice">السعر</label>
+
+                        <input
+                            type="number"
+                            id="productPrice"
+                            required
+                            min="0"
+                            step="0.01"
+                            placeholder="0.00"
+                        >
+                    </div>
+
+                    <div class="form-group">
+                        <label for="productStock">المخزون</label>
+
+                        <input
+                            type="number"
+                            id="productStock"
+                            required
+                            min="0"
+                            step="1"
+                            placeholder="0"
+                        >
+                    </div>
+
+                    <div class="form-group full-column">
+                        <label for="productImage">مسار الصورة</label>
+
+                        <input
+                            type="text"
+                            id="productImage"
+                            placeholder="/images/product.jpg"
+                        >
+
+                        <small>
+                            ضع الصور داخل public/images ثم استخدم
+                            /images/اسم-الصورة.jpg
+                        </small>
+                    </div>
+
+                    <div class="form-group full-column">
+                        <label for="productDescription">الوصف</label>
+
+                        <textarea
+                            id="productDescription"
+                            maxlength="500"
+                            placeholder="اكتب وصفًا مختصرًا وواضحًا للمنتج"
+                        ></textarea>
+                    </div>
+
+                </div>
+
+                <div class="form-actions">
+                    <button
+                        type="button"
+                        class="secondary-button"
+                        id="cancelProductButton"
+                    >
+                        إلغاء
+                    </button>
+
+                    <button
+                        type="submit"
+                        class="primary-button"
+                        id="saveProductButton"
+                    >
+                        حفظ المنتج
+                    </button>
+                </div>
+
+            </form>
+
+        </div>
+    </div>
+
+    <!-- =========================
+         تفاصيل الطلب
+    ========================== -->
+    <div id="orderDetailsModal" class="modal">
+        <div class="modal-card order-details-modal-card">
+
+            <div class="modal-header">
+                <div>
+                    <span>تفاصيل عملية الشراء</span>
+                    <h2 id="orderDetailsTitle">تفاصيل الطلب</h2>
+                </div>
+
+                <button
+                    type="button"
+                    class="icon-button"
+                    id="closeOrderDetailsButton"
+                >
+                    <i class="fa-solid fa-xmark"></i>
+                </button>
+            </div>
+
+            <div id="orderDetailsContent"></div>
+
+        </div>
+    </div>
+
+    <!-- تأكيد الحذف -->
+    <div id="confirmModal" class="modal">
+        <div class="modal-card confirm-modal-card">
+
+            <div class="confirm-icon">
+                <i class="fa-solid fa-triangle-exclamation"></i>
+            </div>
+
+            <h2 id="confirmTitle">تأكيد العملية</h2>
+            <p id="confirmMessage">هل أنت متأكد؟</p>
+
+            <div class="form-actions">
+                <button
+                    type="button"
+                    class="secondary-button"
+                    id="cancelConfirmButton"
+                >
+                    إلغاء
+                </button>
+
+                <button
+                    type="button"
+                    class="danger-button"
+                    id="confirmActionButton"
+                >
+                    تأكيد
+                </button>
+            </div>
+
+        </div>
+    </div>
+
+    <script src="/app.js"></script>
+</body>
+</html>
