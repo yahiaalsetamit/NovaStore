@@ -1,10 +1,11 @@
+require('dotenv').config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const db = require('./database/database');
 const session = require('express-session');
 const authRoutes = require('./routes/authRoutes');
 const app = express();
-const port = process.env.PORT || 3000;
+const port = Number(process.env.PORT);
 
 const productRoutes = require('./routes/productRoutes');
 const cartRoutes = require('./routes/cartRoutes');
@@ -14,7 +15,7 @@ app.use(bodyParser.json());
 app.use(session({
     name: 'nova_admin_session',
 
-    secret: 'nova-store-admin-secret-key-2026',
+    secret: process.env.SESSION_SECRET,
 
     resave: false,
 

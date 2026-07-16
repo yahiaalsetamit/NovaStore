@@ -10,3 +10,6 @@ data/*.db
 # ملفات مؤقتة
 *.log
 .vscode/
+
+
+.env
