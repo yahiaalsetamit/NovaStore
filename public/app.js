@@ -213,6 +213,33 @@ const orderDetailsTitle =
 const orderDetailsContent =
     document.getElementById("orderDetailsContent");
 
+    const adminLoginModal =
+    document.getElementById('adminLoginModal');
+
+const adminLoginForm =
+    document.getElementById('adminLoginForm');
+
+const adminUsernameInput =
+    document.getElementById('adminUsername');
+
+const adminPasswordInput =
+    document.getElementById('adminPassword');
+
+const adminLoginButton =
+    document.getElementById('adminLoginButton');
+
+const adminLoginError =
+    document.getElementById('adminLoginError');
+
+const cancelAdminLoginButton =
+    document.getElementById('cancelAdminLoginButton');
+
+const toggleAdminPassword =
+    document.getElementById('toggleAdminPassword');
+
+const adminLogoutButton =
+    document.getElementById('adminLogoutButton');
+
 /* =========================
    تأكيد العمليات
 ========================= */
@@ -896,13 +923,45 @@ async function submitOrder(event) {
    لوحة الإدارة
 ========================= */
 
-async function openAdmin() {
-    storeView.classList.add("hidden");
-    adminView.classList.remove("hidden");
+async function checkAdminAuthentication() {
+    try {
+        const data = await requestJson('/auth/status');
+
+        return data.authenticated === true;
+    } catch (error) {
+        console.error('Authentication check failed:', error);
+        return false;
+    }
+}
+
+async function requestAdminAccess() {
+    const authenticated = await checkAdminAuthentication();
+
+    if (authenticated) {
+        await showAdminDashboard();
+        return;
+    }
+
+    adminLoginError.classList.add('hidden');
+    adminLoginError.textContent = '';
+
+    adminLoginForm.reset();
+    openModal(adminLoginModal);
+
+    window.setTimeout(() => {
+        adminUsernameInput.focus();
+    }, 100);
+}
+
+async function showAdminDashboard() {
+    closeModal(adminLoginModal);
+
+    storeView.classList.add('hidden');
+    adminView.classList.remove('hidden');
 
     window.scrollTo({
         top: 0,
-        behavior: "instant"
+        behavior: 'instant'
     });
 
     await loadAdminData();
@@ -1653,8 +1712,115 @@ checkoutModal.addEventListener("click", event => {
 
 checkoutForm.addEventListener("submit", submitOrder);
 
-openAdminButton.addEventListener("click", openAdmin);
-backToStoreButton.addEventListener("click", closeAdmin);
+openAdminButton.addEventListener(
+    'click',
+    requestAdminAccess
+);backToStoreButton.addEventListener("click", closeAdmin);
+
+adminLoginForm.addEventListener("submit", async event => {
+    event.preventDefault();
+
+    const username = adminUsernameInput.value.trim();
+    const password = adminPasswordInput.value;
+
+    adminLoginError.classList.add("hidden");
+    adminLoginError.textContent = "";
+
+    if (!username || !password) {
+        adminLoginError.textContent =
+            "يرجى إدخال اسم المستخدم وكلمة المرور.";
+
+        adminLoginError.classList.remove("hidden");
+        return;
+    }
+
+    setButtonLoading(
+        adminLoginButton,
+        true,
+        "جارٍ تسجيل الدخول..."
+    );
+
+    try {
+        const data = await requestJson("/auth/login", {
+            method: "POST",
+
+            headers: {
+                "Content-Type": "application/json"
+            },
+
+            body: JSON.stringify({
+                username,
+                password
+            })
+        });
+
+        adminLoginForm.reset();
+
+        showToast(
+            data.message || "تم تسجيل الدخول بنجاح."
+        );
+
+        await showAdminDashboard();
+    } catch (error) {
+        adminLoginError.textContent = error.message;
+        adminLoginError.classList.remove("hidden");
+    } finally {
+        setButtonLoading(adminLoginButton, false);
+    }
+});
+
+cancelAdminLoginButton.addEventListener("click", () => {
+    adminLoginForm.reset();
+
+    adminLoginError.textContent = "";
+    adminLoginError.classList.add("hidden");
+
+    closeModal(adminLoginModal);
+});
+
+toggleAdminPassword.addEventListener("click", () => {
+    const passwordIsHidden =
+        adminPasswordInput.type === "password";
+
+    adminPasswordInput.type =
+        passwordIsHidden ? "text" : "password";
+
+    toggleAdminPassword.innerHTML =
+        passwordIsHidden
+            ? '<i class="fa-solid fa-eye-slash"></i>'
+            : '<i class="fa-solid fa-eye"></i>';
+});
+
+adminLogoutButton.addEventListener("click", async () => {
+    try {
+        const data = await requestJson("/auth/logout", {
+            method: "POST"
+        });
+
+        adminView.classList.add("hidden");
+        storeView.classList.remove("hidden");
+
+        switchAdminSection("dashboard");
+
+        showToast(
+            data.message || "تم تسجيل الخروج بنجاح."
+        );
+
+        await Promise.all([
+            loadProducts(),
+            loadCart()
+        ]);
+    } catch (error) {
+        showToast(error.message, "error");
+    }
+});
+
+adminLoginModal.addEventListener("click", event => {
+    closeModalWhenBackdropClicked(
+        event,
+        adminLoginModal
+    );
+});
 
 adminNavigationButtons.forEach(button => {
     button.addEventListener("click", () => {

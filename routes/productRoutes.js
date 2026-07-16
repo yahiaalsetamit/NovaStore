@@ -2,10 +2,11 @@ const express = require('express');
 const db = require('../database/database');
 
 const router = express.Router();
+const requireAdmin = require('../middleware/adminAuth');
 
 
 // 1. إضافة منتج جديد
-router.post('/', (req, res) => {
+router.post('/', (requireAdmin , res) => {
     const {
         name,
         description,
@@ -137,7 +138,7 @@ router.get('/:id', (req, res) => {
     );
 });
 // 4. حذف منتج
-router.delete('/:id', (req, res) => {
+router.delete('/:id', (requireAdmin , res) => {
     const productId = req.params.id;
 
     db.run(
@@ -167,7 +168,7 @@ router.delete('/:id', (req, res) => {
 });
 
 // تعديل منتج
-router.put('/:id', (req, res) => {
+router.put('/:id', (requireAdmin , res) => {
     const productId = req.params.id;
 
     const {

@@ -2,7 +2,7 @@ const express = require('express');
 const db = require('../database/database');
 
 const router = express.Router();
-
+const requireAdmin = require('../middleware/adminAuth');
 /*
 إتمام الطلب.
 
@@ -223,7 +223,7 @@ router.post('/', (req, res) => {
     });
 });
 // مسار عرض جميع الطلبات
-router.get('/', (req, res) => {
+router.get('/', (requireAdmin, res) => {
     db.all(
         'SELECT * FROM orders ORDER BY id DESC',
         [],
@@ -244,7 +244,7 @@ router.get('/', (req, res) => {
     );
 });
 // مسار عرض طلب واحد مع تفاصيل المنتجات
-router.get('/:id', (req, res) => {
+router.get('/:id', (requireAdmin, res) => {
     const orderId = Number(req.params.id);
 
     db.get(
