@@ -14,7 +14,7 @@ router.post('/', (requireAdmin , res) => {
         category,
         image,
         stock
-    } = req.body;
+    } = requireAdmin.body;
 
     if (!name || price === undefined || !category) {
         return res.status(400).json({
@@ -139,7 +139,7 @@ router.get('/:id', (req, res) => {
 });
 // 4. حذف منتج
 router.delete('/:id', (requireAdmin , res) => {
-    const productId = req.params.id;
+    const productId = requireAdmin.params.id;
 
     db.run(
         'DELETE FROM products WHERE id = ?',
@@ -178,7 +178,7 @@ router.put('/:id', (requireAdmin , res) => {
         category,
         image,
         stock
-    } = req.body;
+    } = requireAdmin.body;
 
     if (!name || price === undefined || !category) {
         return res.status(400).json({

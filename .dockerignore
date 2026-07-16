@@ -1,4 +1,10 @@
 node_modules
-**/*.test*
+npm-debug.log
+*.log
+.git
+.gitignore
+.env
+.env.*
 Dockerfile
-.dockerignore
+README.md
+data/*.db
